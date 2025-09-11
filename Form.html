@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Response Form</title>
+  <style>
+    body {
+      font-family: "Times New Roman", serif;
+      margin: 40px;
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    .desc {
+      display: block;
+      font-weight: normal;
+      font-size: 14px;
+      color: #666;  /* faint grey */
+      margin-top: 3px;
+      margin-bottom: 5px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      font-family: "Times New Roman", serif;
+      font-size: 16px;
+    }
+    textarea {
+      min-height: 70px;
+    }
+    button {
+      margin-top: 25px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>User Response Form</h1>
+  <form id="responseForm">
+    <label>Username:
+      <span class="desc">{This creates a user account.}</span>
+      <input type="text" name="username" required>
+    </label>
+
+    <label>Password:</label>
+    <input type="password" name="password" required>
+
+    <label>What is your Gender:
+      <span class="desc">{In words.}</span>
+      <input type="text" name="gender" required>
+    </label>
+
+    <label>What is your Age:
+      <span class="desc">{In words.}</span>
+      <input type="text" name="age" required>
+    </label>
+
+    <label>Tell me about Yourself:
+      <span class="desc">{Different You}</span>
+      <textarea name="about" required></textarea>
+    </label>
+
+    <label>What is your LifeStyle:
+      <span class="desc">{Food, Music, Social Media, Family, Habits, Pls describe.}</span>
+      <textarea name="lifestyle" required></textarea>
+    </label>
+
+    <label>How is your Mood Truck:
+      <span class="desc">{Lovely, angry, scary, sad, Pls describe.}</span>
+      <textarea name="mood" required></textarea>
+    </label>
+
+    <label>What would you like to talk about [Academics/ Parents/ Friends]
+      <span class="desc">{Type here}</span>
+      <textarea name="topic" required></textarea>
+    </label>
+
+    <label>Would you like to share any of your worries?
+      <span class="desc">{space for you}</span>
+      <textarea name="worries"></textarea>
+    </label>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    document.getElementById("responseForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = Object.fromEntries(new FormData(e.target).entries());
+
+      const res = await fetch("http://localhost:5000/api/responses", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
+
+      if (res.ok) {
+        alert("✅ Response saved successfully!");
+        e.target.reset();
+      } else {
+        alert("❌ Failed to save response.");
+      }
+    });
+  </script>
+</body>
+</html>
