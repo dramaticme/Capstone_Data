@@ -1,23 +1,23 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// test route
-app.get("/", (req, res) => {
-  res.send(" Server is running fine!");
-});
+// serve static files (like Form.html, CSS, JS)
+app.use(express.static(__dirname));
 
-// connect to MongoDB (adjust db name if needed)
+// MongoDB connection
 const mongoURI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/responsesDB";
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
+// Schema
 const responseSchema = new mongoose.Schema({
   username: String,
   password: String,
@@ -32,7 +32,7 @@ const responseSchema = new mongoose.Schema({
 
 const Response = mongoose.model("Response", responseSchema);
 
-// API endpoint to save data
+// API endpoint
 app.post("/api/responses", async (req, res) => {
   try {
     const response = new Response(req.body);
@@ -43,6 +43,7 @@ app.post("/api/responses", async (req, res) => {
   }
 });
 
+// use Render's port
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
