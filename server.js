@@ -12,7 +12,8 @@ app.get("/", (req, res) => {
 });
 
 // connect to MongoDB (adjust db name if needed)
-mongoose.connect("mongodb://127.0.0.1:27017/responsesDB", {
+const mongoURI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/responsesDB";
+mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -42,6 +43,7 @@ app.post("/api/responses", async (req, res) => {
   }
 });
 
-app.listen(5000, () => {
-  console.log("Server running on http://localhost:5000");
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

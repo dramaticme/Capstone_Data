@@ -100,17 +100,17 @@
       e.preventDefault();
       const formData = Object.fromEntries(new FormData(e.target).entries());
 
-      const res = await fetch("http://localhost:5000/api/responses", {
+      const res = await fetch("/api/responses", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)
       });
 
       if (res.ok) {
-        alert("✅ Response saved successfully!");
+        alert("Response saved successfully!");
         e.target.reset();
       } else {
-        alert("❌ Failed to save response.");
+        alert("Failed to save response.");
       }
     });
   </script>
