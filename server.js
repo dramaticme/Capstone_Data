@@ -11,12 +11,13 @@ app.use(express.json());
 app.use(express.static(__dirname));
 
 // MongoDB connection
-const mongoURI = process.env.MONGODB_URI || "mongodb+srv://myAtlasDBUser:aashu310@myatlasclusteredu.qhigots.mongodb.net/Capstone";
+const mongoURI =
+  process.env.MONGODB_URI ||
+  "mongodb+srv://myAtlasDBUser:aashu310@myatlasclusteredu.qhigots.mongodb.net/Capstone";
 
 mongoose.connect(mongoURI);
 
-
-/// Schema
+// Schema
 const responseSchema = new mongoose.Schema({
   username: String,
   password: String,
@@ -50,7 +51,6 @@ app.post("/api/responses", async (req, res) => {
 
 // use Render's port
 const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
