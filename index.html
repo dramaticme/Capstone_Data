@@ -2,115 +2,240 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>User Response Form</title>
+  <title>Survey Questionnaire</title>
   <style>
     body {
       font-family: "Times New Roman", serif;
-      margin: 40px;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #dbeafe, #ede9fe);
+      color: #333;
     }
+
+    .container {
+      max-width: 800px;
+      width: 90%;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 35px;
+      border-radius: 18px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(6px);
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 30px;
+      color: #1f2937;
+    }
+
     label {
       display: block;
       margin-top: 20px;
       font-weight: bold;
+      color: #374151;
     }
+
     .desc {
       display: block;
       font-weight: normal;
       font-size: 14px;
-      color: #666;  /* faint grey */
+      color: #6b7280;
       margin-top: 3px;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
     }
+
     input, textarea {
       width: 100%;
-      padding: 8px;
-      margin-top: 5px;
+      padding: 12px 14px;
+      margin-top: 4px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 16px;
       font-family: "Times New Roman", serif;
-      font-size: 16px;
+      background: #f9fafb;
+      transition: all 0.3s ease;
     }
+
+    input:focus, textarea:focus {
+      border-color: #818cf8;
+      box-shadow: 0 0 8px rgba(129, 140, 248, 0.4);
+      background: #ffffff;
+      outline: none;
+    }
+
     textarea {
-      min-height: 70px;
+      min-height: 90px;
+      resize: vertical;
     }
+
     button {
-      margin-top: 25px;
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #333;
+      margin-top: 30px;
+      padding: 14px 24px;
+      font-size: 18px;
+      font-family: "Times New Roman", serif;
+      background: #818cf8;
       color: #fff;
       border: none;
-      border-radius: 5px;
+      border-radius: 12px;
       cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
     }
+
     button:hover {
-      background-color: #555;
+      background: #6366f1;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+      transform: translateY(-2px);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    /* Responsive Layout */
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+      h1 {
+        font-size: 24px;
+      }
+      input, textarea {
+        font-size: 15px;
+      }
+    }
+
+    /* Success / Error messages */
+    .message {
+      text-align: center;
+      margin-top: 20px;
+      font-weight: bold;
+      display: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-family: "Times New Roman", serif;
+      animation: fadeIn 0.5s ease;
+    }
+    .message.success {
+      color: #065f46;
+      background: #d1fae5;
+    }
+    .message.error {
+      color: #991b1b;
+      background: #fee2e2;
     }
   </style>
 </head>
 <body>
-  <h1>User Response Form</h1>
-  <form id="responseForm">
-    <label>Username:
-      <span class="desc">{This creates a user account.}</span>
-      <input type="text" name="username" required>
-    </label>
+  <div class="container">
+    <h1>Survey Questionnaire</h1>
+    <form id="responseForm">
+      <label>Username:
+        <span class="desc">This creates a user account.</span>
+        <input type="text" name="username" placeholder="Enter your name..." required>
+      </label>
 
-    <label>Password:</label>
-    <input type="password" name="password" required>
+      <label>Password:</label>
+      <input type="password" name="password" placeholder="Enter your password..." required>
 
-    <label>What is your Gender:
-      <span class="desc">{In words.}</span>
-      <input type="text" name="gender" required>
-    </label>
+      <label>What is your Gender:
+        <span class="desc">In words.</span>
+        <input type="text" name="gender" placeholder="e.g., Male, Female, Other..." required>
+      </label>
 
-    <label>What is your Age:
-      <span class="desc">{In words.}</span>
-      <input type="text" name="age" required>
-    </label>
+      <label>What is your Age:
+        <span class="desc">In words.</span>
+        <input type="text" name="age" placeholder="e.g., Twenty Five..." required>
+      </label>
 
-    <label>Tell me about Yourself:
-      <span class="desc">{Different You}</span>
-      <textarea name="about" required></textarea>
-    </label>
+      <label>Take a moment to reflect on your day or week. What's been on your mind lately?
+        <span class="desc">You can write as much or as little as you like.</span>
+        <textarea name="reflection" placeholder="It’s okay, take your time..." required></textarea>
+      </label>
 
-    <label>What is your LifeStyle:
-      <span class="desc">{Food, Music, Social Media, Family, Habits, Pls describe.}</span>
-      <textarea name="lifestyle" required></textarea>
-    </label>
+      <label>What's Causing Stress?
+        <span class="desc">Procrastination, no healthy diet, major life event, relationship issue...</span>
+        <textarea name="stress" placeholder="Write freely about it..." required></textarea>
+      </label>
 
-    <label>How is your Mood Truck:
-      <span class="desc">{Lovely, angry, scary, sad, Pls describe.}</span>
-      <textarea name="mood" required></textarea>
-    </label>
+      <label>How have you been lately?
+        <span class="desc">Fine, peaceful, stuck, stressed...</span>
+        <textarea name="wellbeing" placeholder="Describe your feelings..." required></textarea>
+      </label>
 
-    <label>What would you like to talk about [Academics/ Parents/ Friends]
-      <span class="desc">{Type here}</span>
-      <textarea name="topic" required></textarea>
-    </label>
+      <label>How Are You Handling your Stress?
+        <span class="desc">Anything that helps you withstand your situation.</span>
+        <textarea name="coping" placeholder="Share your coping strategies..." required></textarea>
+      </label>
 
-    <label>Would you like to share any of your worries?
-      <span class="desc">{space for you}</span>
-      <textarea name="worries"></textarea>
-    </label>
+      <label>Take a moment to describe yourself.
+        <textarea name="about" placeholder="Describe yourself in your own words..." required></textarea>
+      </label>
 
-    <button type="submit">Submit</button>
-  </form>
+      <label>Tell us a bit about what fills your days. Your Lifestyle?
+        <span class="desc">Food, Music, Social Media, Family, Habits...</span>
+        <textarea name="lifestyle" placeholder="Write about your daily life..." required></textarea>
+      </label>
+
+      <label>How would you describe your Mood Truck?
+        <span class="desc">Lovely, angry, scary, sad...</span>
+        <textarea name="mood" placeholder="Express your mood..." required></textarea>
+      </label>
+
+      <label>What would you like to talk about?
+        <span class="desc">Academics, family, friends, or anything else.</span>
+        <textarea name="topic" placeholder="Share what’s on your mind..." required></textarea>
+      </label>
+
+      <label>Would you like to share any of your worries?
+        <span class="desc">Space for you.</span>
+        <textarea name="worries" placeholder="Write your worries if you want..."></textarea>
+      </label>
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <div id="formMessage" class="message"></div>
+  </div>
 
   <script>
-    document.getElementById("responseForm").addEventListener("submit", async (e) => {
+    const form = document.getElementById("responseForm");
+    const messageBox = document.getElementById("formMessage");
+
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const formData = Object.fromEntries(new FormData(e.target).entries());
 
-      const res = await fetch("/api/responses", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
-      });
+      try {
+        const res = await fetch("/api/responses", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData)
+        });
 
-      if (res.ok) {
-        alert("Response saved successfully!");
-        e.target.reset();
-      } else {
-        alert("Failed to save response.");
+        if (res.ok) {
+          messageBox.textContent = "🌿 Thank you! Your response is safe with us.";
+          messageBox.className = "message success";
+          messageBox.style.display = "block";
+          form.reset();
+        } else {
+          throw new Error("Failed to save response.");
+        }
+      } catch (err) {
+        messageBox.textContent = "⚠️ " + err.message + " Try again, no rush.";
+        messageBox.className = "message error";
+        messageBox.style.display = "block";
       }
     });
   </script>
