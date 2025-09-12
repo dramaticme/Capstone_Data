@@ -9,7 +9,6 @@
       margin: 40px;
     }
 
-    /* Keep label heading behavior */
     label {
       display: block;
       margin-top: 20px;
@@ -20,12 +19,11 @@
       display: block;
       font-weight: normal;
       font-size: 14px;
-      color: #666;  /* faint grey */
+      color: #666;
       margin-top: 3px;
       margin-bottom: 5px;
     }
 
-    /* Apply width only to non-checkbox inputs */
     input:not([type="checkbox"]),
     textarea {
       width: 100%;
@@ -40,11 +38,10 @@
       min-height: 70px;
     }
 
-    /* Style checkboxes explicitly so they don't stretch */
     input[type="checkbox"] {
       width: auto;
       height: auto;
-      margin: 0; /* we'll add small margin via .consent layout */
+      margin: 0;
       box-sizing: content-box;
       vertical-align: top;
     }
@@ -63,17 +60,14 @@
       background-color: #555;
     }
 
-    /* --- Consent block layout --- */
-    /* isolate consent block so page-wide styles don't push it around */
     #consent-block {
       width: 100%;
-      text-align: left; /* ensure left alignment even if global text-align differs */
+      text-align: left;
       clear: both;
       margin-top: 18px;
       margin-bottom: 18px;
     }
 
-    /* inline container keeps checkbox and text together */
     .consent {
       display: flex;
       align-items: flex-start;
@@ -83,7 +77,6 @@
       line-height: 1.45;
     }
 
-    /* label for the checkbox text — takes remaining space and wraps neatly */
     .consent-text {
       display: block;
       font-size: 14px;
@@ -92,12 +85,10 @@
       margin: 0;
     }
 
-    /* small vertical offset to align checkbox with first line of text */
     .consent input[type="checkbox"] {
       margin-top: 3px;
     }
 
-    /* Responsive: keep form from getting too wide on small screens */
     @media (max-width: 480px) {
       body { margin: 16px; }
       .consent { max-width: 100%; }
@@ -170,7 +161,7 @@
       <textarea name="extra"></textarea>
     </label>
 
-    <!-- ===== CONSENT (fixed) ===== -->
+    <!-- ===== CONSENT ===== -->
     <div id="consent-block">
       <div style="font-weight:bold; margin-bottom:6px;">
         Privacy Consent:        
@@ -183,7 +174,6 @@
         </label>
       </div>
     </div>
-    <!-- ========================= -->
 
     <button type="submit">Submit</button>
   </form>
@@ -193,8 +183,11 @@
       e.preventDefault();
       const formData = Object.fromEntries(new FormData(e.target).entries());
 
+      // ✅ Convert checkbox to Boolean
+      formData.consent = e.target.consent.checked;
+
       try {
-        const res = await fetch("/api/responses", {
+        const res = await fetch("/api/responses", {  // replace with full URL if needed
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData)
@@ -205,6 +198,7 @@
           e.target.reset();
         } else {
           alert("Failed to save response.");
+          console.error(await res.text());
         }
       } catch (err) {
         alert("Network error. Failed to save response.");
