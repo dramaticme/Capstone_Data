@@ -11,12 +11,16 @@ app.use(express.json());
 app.use(express.static(__dirname));
 
 // MongoDB connection
-const mongoURI = process.env.MONGODB_URI || "mongodb+srv://myAtlasDBUser:aashu310@myatlasclusteredu.qhigots.mongodb.net/Capstone";
+const mongoURI =
+  process.env.MONGODB_URI ||
+  "mongodb+srv://myAtlasDBUser:aashu310@myatlasclusteredu.qhigots.mongodb.net/Capstone";
 
-mongoose.connect(mongoURI);
+mongoose
+  .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
-
-// Schema
+// Schema updated to include all form fields
 const responseSchema = new mongoose.Schema({
   username: String,
   password: String,
@@ -24,11 +28,17 @@ const responseSchema = new mongoose.Schema({
   age: String,
   about: String,
   lifestyle: String,
+  status: String,     // How have you been lately?
   mood: String,
-  topic: String,
+  thoughts: String,   // Reflection
+  stress: String,     // What's causing stress?
+  coping: String,     // How handling stress
   worries: String,
+  extra: String,      // Anything else
+  consent: Boolean,   // Checkbox
 });
 
+// Model
 const Response = mongoose.model("Response", responseSchema);
 
 // API endpoint
@@ -38,6 +48,7 @@ app.post("/api/responses", async (req, res) => {
     await response.save();
     res.status(201).send("Saved successfully");
   } catch (error) {
+    console.error(error);
     res.status(500).send("Error saving response");
   }
 });
