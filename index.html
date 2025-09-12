@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>User Response Form</title>
   <style>
     body {
       font-family: "Times New Roman", serif;
       margin: 40px;
     }
+
+    /* Keep label heading behavior */
     label {
       display: block;
       margin-top: 20px;
       font-weight: bold;
     }
+
     .desc {
       display: block;
       font-weight: normal;
@@ -21,16 +24,31 @@
       margin-top: 3px;
       margin-bottom: 5px;
     }
-    input, textarea {
+
+    /* Apply width only to non-checkbox inputs */
+    input:not([type="checkbox"]),
+    textarea {
       width: 100%;
       padding: 8px;
       margin-top: 5px;
       font-family: "Times New Roman", serif;
       font-size: 16px;
+      box-sizing: border-box;
     }
+
     textarea {
       min-height: 70px;
     }
+
+    /* Style checkboxes explicitly so they don't stretch */
+    input[type="checkbox"] {
+      width: auto;
+      height: auto;
+      margin: 0; /* we'll add small margin via .consent layout */
+      box-sizing: content-box;
+      vertical-align: top;
+    }
+
     button {
       margin-top: 25px;
       padding: 10px 20px;
@@ -44,10 +62,51 @@
     button:hover {
       background-color: #555;
     }
+
+    /* --- Consent block layout --- */
+    /* isolate consent block so page-wide styles don't push it around */
+    #consent-block {
+      width: 100%;
+      text-align: left; /* ensure left alignment even if global text-align differs */
+      clear: both;
+      margin-top: 18px;
+      margin-bottom: 18px;
+    }
+
+    /* inline container keeps checkbox and text together */
+    .consent {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 8px;
+      max-width: 900px;
+      line-height: 1.45;
+    }
+
+    /* label for the checkbox text — takes remaining space and wraps neatly */
+    .consent-text {
+      display: block;
+      font-size: 14px;
+      color: #000;
+      max-width: 820px;
+      margin: 0;
+    }
+
+    /* small vertical offset to align checkbox with first line of text */
+    .consent input[type="checkbox"] {
+      margin-top: 3px;
+    }
+
+    /* Responsive: keep form from getting too wide on small screens */
+    @media (max-width: 480px) {
+      body { margin: 16px; }
+      .consent { max-width: 100%; }
+    }
   </style>
 </head>
 <body>
-  <h1>User Response Form</h1>
+  <h1>Question Based Stress Detection</h1>
+
   <form id="responseForm">
     <label>Username:
       <span class="desc">{This creates a user account.}</span>
@@ -67,30 +126,64 @@
       <input type="text" name="age" required>
     </label>
 
-    <label>Tell me about Yourself:
-      <span class="desc">{Different You}</span>
+    <label>Take a moment to describe yourself:
+      <span class="desc">{Your Passion, Your first Love, Your fav Dish}</span>
       <textarea name="about" required></textarea>
     </label>
 
-    <label>What is your LifeStyle:
-      <span class="desc">{Food, Music, Social Media, Family, Habits, Pls describe.}</span>
+    <label>Tell us a bit about what fills your days. Your Lifestyle?
+      <span class="desc">{Music, Gym, Social Media, Study, Family, Food}</span>
       <textarea name="lifestyle" required></textarea>
     </label>
 
-    <label>How is your Mood Truck:
+    <label>How have you been lately?
+      <span class="desc">{Blessed, peaceful, stuck, stressed}</span>
+      <input type="text" name="status" required>
+    </label>
+
+    <label>How would you describe your Mood Truck?
       <span class="desc">{Lovely, angry, scary, sad, Pls describe.}</span>
       <textarea name="mood" required></textarea>
     </label>
 
-    <label>What would you like to talk about [Academics/ Parents/ Friends]
-      <span class="desc">{Type here}</span>
-      <textarea name="topic" required></textarea>
+    <label>Take a moment to reflect on your day or week. What's been on your mind lately?
+      <span class="desc">{You can write as much or as little as you like.}</span>
+      <textarea name="thoughts" required></textarea>
+    </label>
+
+    <label>What's Causing Stress? If you could describe what's causing you stress right now, what would you say?
+      <span class="desc">{procrastination, no healthy diet, major life event, relationship issue}</span>
+      <textarea name="stress" required></textarea>
+    </label>
+
+    <label>How Are You Handling your Stress?
+      <span class="desc">{Anything you find worth sharing which made you withstand your situation.}</span>
+      <textarea name="coping" required></textarea>
     </label>
 
     <label>Would you like to share any of your worries?
       <span class="desc">{space for you}</span>
       <textarea name="worries"></textarea>
     </label>
+
+    <label>Anything else you want us to know?
+      <textarea name="extra"></textarea>
+    </label>
+
+    <!-- ===== CONSENT (fixed) ===== -->
+    <div id="consent-block">
+      <div style="font-weight:bold; margin-bottom:6px;">
+        Privacy Consent:        
+      </div>
+
+      <div class="consent">
+        <input type="checkbox" id="consent" name="consent" required>
+        <label for="consent" class="consent-text">
+          I voluntarily consent to the collection and secure storage of my responses. I understand that my data will be used solely for research and the development of stress-detection algorithms, and that all information will remain anonymous and confidential.
+        </label>
+      </div>
+    </div>
+    <!-- ========================= -->
 
     <button type="submit">Submit</button>
   </form>
@@ -100,17 +193,22 @@
       e.preventDefault();
       const formData = Object.fromEntries(new FormData(e.target).entries());
 
-      const res = await fetch("/api/responses", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
-      });
+      try {
+        const res = await fetch("/api/responses", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData)
+        });
 
-      if (res.ok) {
-        alert("Response saved successfully!");
-        e.target.reset();
-      } else {
-        alert("Failed to save response.");
+        if (res.ok) {
+          alert("Response saved successfully!");
+          e.target.reset();
+        } else {
+          alert("Failed to save response.");
+        }
+      } catch (err) {
+        alert("Network error. Failed to save response.");
+        console.error(err);
       }
     });
   </script>
