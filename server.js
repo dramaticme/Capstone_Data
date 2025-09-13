@@ -11,9 +11,7 @@ app.use(express.json());
 app.use(express.static(__dirname));
 
 // MongoDB connection
-const mongoURI =
-  process.env.MONGODB_URI ||
-  "mongodb+srv://myAtlasDBUser:aashu310@myatlasclusteredu.qhigots.mongodb.net/Capstone";
+const mongoURI = process.env.MONGODB_URI;
 
 mongoose.connect(mongoURI);
 
