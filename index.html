@@ -2,192 +2,265 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>User Response Form</title>
+  <title>Stress Detection Survey</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
+    /* ===== GLOBAL STYLE ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: "Times New Roman", serif;
-      margin: 40px;
+      font-family: 'Inter', sans-serif;
+      background: #f8f9fa; /* clean white background */
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      width: 100%;
+      padding: 18px 40px;
+      background: rgba(0,0,0,0.05);
+      backdrop-filter: blur(5px);
+      color: #333;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 2;
+    }
+
+    .navbar .logo {
+      font-size: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    /* ===== FORM CONTAINER ===== */
+    .container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ===== FORM CARD ===== */
+    .form-card {
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      padding: 40px 50px;
+      width: 100%;
+      max-width: 750px;
+      animation: fadeIn 0.7s ease-in-out;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+      font-weight: 700;
+      background: linear-gradient(90deg, #ff758c, #6a11cb, #ff758c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.subtext {
+      text-align: center;
+      color: #555;
+      margin-bottom: 30px;
+      font-size: 15px;
     }
 
     label {
       display: block;
       margin-top: 20px;
-      font-weight: bold;
+      font-weight: 600;
+      color: #333;
     }
 
     .desc {
       display: block;
       font-weight: normal;
-      font-size: 14px;
+      font-size: 13px;
       color: #666;
-      margin-top: 3px;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
     }
 
     input:not([type="checkbox"]),
     textarea {
       width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      font-family: "Times New Roman", serif;
-      font-size: 16px;
-      box-sizing: border-box;
+      padding: 12px;
+      margin-top: 4px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #fff;
+      color: #333;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: #bab3b4;
+      box-shadow: 0 0 10px rgba(229, 177, 186, 0.3);
+      outline: none;
     }
 
     textarea {
-      min-height: 70px;
-    }
-
-    input[type="checkbox"] {
-      width: auto;
-      height: auto;
-      margin: 0;
-      box-sizing: content-box;
-      vertical-align: top;
+      min-height: 80px;
+      resize: vertical;
     }
 
     button {
-      margin-top: 25px;
-      padding: 10px 20px;
+      margin-top: 30px;
+      width: 100%;
+      padding: 14px;
       font-size: 16px;
-      background-color: #333;
-      color: #fff;
+      font-weight: 600;
+      background: linear-gradient(135deg, #e2e5e5, #e2e5e5);
+      color: #0f0101;
       border: none;
-      border-radius: 5px;
+      border-radius: 6px;
       cursor: pointer;
-    }
-    button:hover {
-      background-color: #555;
+      transition: transform 0.2s, background 0.3s, box-shadow 0.3s;
     }
 
-    #consent-block {
-      width: 100%;
-      text-align: left;
-      clear: both;
-      margin-top: 18px;
-      margin-bottom: 18px;
+    button:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #e2e5e5, #e2e2e5);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
     }
 
     .consent {
+      margin-top: 20px;
       display: flex;
+      gap: 10px;
       align-items: flex-start;
-      justify-content: flex-start;
-      gap: 8px;
-      max-width: 900px;
-      line-height: 1.45;
     }
 
     .consent-text {
-      display: block;
       font-size: 14px;
-      color: #000;
-      max-width: 820px;
-      margin: 0;
+      color: #444;
+      line-height: 1.5;
     }
 
-    .consent input[type="checkbox"] {
-      margin-top: 3px;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    @media (max-width: 480px) {
-      body { margin: 16px; }
-      .consent { max-width: 100%; }
+    @media (max-width: 600px) {
+      .form-card {
+        padding: 25px;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Question Based Stress Detection</h1>
+  <!-- ===== NAVBAR ===== -->
+  <div class="navbar">
+    <div class="logo">Stress Detection Survey</div>
+    <div>Research Project</div>
+  </div>
 
-  <form id="responseForm">
-    <label>Username:
-      <span class="desc">{This creates a user account.}</span>
-      <input type="text" name="username" required>
-    </label>
+  <!-- ===== FORM ===== -->
+  <div class="container">
+    <div class="form-card">
+      <h1>Stress Detection Survey</h1>
+      <p class="subtext">Help us understand stress levels and coping strategies</p>
 
-    <label>Password:</label>
-    <input type="password" name="password" required>
-
-    <label>What is your Gender:
-      <span class="desc">{In words.}</span>
-      <input type="text" name="gender" required>
-    </label>
-
-    <label>What is your Age:
-      <span class="desc">{In words.}</span>
-      <input type="text" name="age" required>
-    </label>
-
-    <label>Take a moment to describe yourself:
-      <span class="desc">{Your Passion, Your first Love, Your fav Dish}</span>
-      <textarea name="about" required></textarea>
-    </label>
-
-    <label>Tell us a bit about what fills your days. Your Lifestyle?
-      <span class="desc">{Music, Gym, Social Media, Study, Family, Food}</span>
-      <textarea name="lifestyle" required></textarea>
-    </label>
-
-    <label>How have you been lately?
-      <span class="desc">{Blessed, peaceful, stuck, stressed}</span>
-      <input type="text" name="status" required>
-    </label>
-
-    <label>How would you describe your Mood Truck?
-      <span class="desc">{Lovely, angry, scary, sad, Pls describe.}</span>
-      <textarea name="mood" required></textarea>
-    </label>
-
-    <label>Take a moment to reflect on your day or week. What's been on your mind lately?
-      <span class="desc">{You can write as much or as little as you like.}</span>
-      <textarea name="thoughts" required></textarea>
-    </label>
-
-    <label>What's Causing Stress? If you could describe what's causing you stress right now, what would you say?
-      <span class="desc">{procrastination, no healthy diet, major life event, relationship issue}</span>
-      <textarea name="stress" required></textarea>
-    </label>
-
-    <label>How Are You Handling your Stress?
-      <span class="desc">{Anything you find worth sharing which made you withstand your situation.}</span>
-      <textarea name="coping" required></textarea>
-    </label>
-
-    <label>Would you like to share any of your worries?
-      <span class="desc">{space for you}</span>
-      <textarea name="worries"></textarea>
-    </label>
-
-    <label>Anything else you want us to know?
-      <textarea name="extra"></textarea>
-    </label>
-
-    <!-- ===== CONSENT ===== -->
-    <div id="consent-block">
-      <div style="font-weight:bold; margin-bottom:6px;">
-        Privacy Consent:        
-      </div>
-
-      <div class="consent">
-        <input type="checkbox" id="consent" name="consent" required>
-        <label for="consent" class="consent-text">
-          I voluntarily consent to the collection and secure storage of my responses. I understand that my data will be used solely for research and the development of stress-detection algorithms, and that all information will remain anonymous and confidential.
+      <form id="responseForm">
+        <label>Username:
+          <span class="desc">This will create your account.</span>
+          <input type="text" name="username" required>
         </label>
-      </div>
-    </div>
 
-    <button type="submit">Submit</button>
-  </form>
+        <label>Password:</label>
+        <input type="password" name="password" required>
+
+        <label>What is your Gender:
+          <span class="desc">Please write in words.</span>
+          <input type="text" name="gender" required>
+        </label>
+
+        <label>What is your Age:
+          <span class="desc">Please write in words.</span>
+          <input type="text" name="age" required>
+        </label>
+
+        <label>Describe yourself:
+          <span class="desc">Your passions, first love, favourite dish, etc.</span>
+          <textarea name="about" required></textarea>
+        </label>
+
+        <label>Your Lifestyle:
+          <span class="desc">Music, Gym, Social Media, Study, Family, Food</span>
+          <textarea name="lifestyle" required></textarea>
+        </label>
+
+        <label>How have you been lately?
+          <span class="desc">Blessed, peaceful, stuck, stressed</span>
+          <input type="text" name="status" required>
+        </label>
+
+        <label>Your Mood:
+          <span class="desc">Lovely, angry, sad, excited — please describe.</span>
+          <textarea name="mood" required></textarea>
+        </label>
+
+        <label>Recent thoughts:
+          <span class="desc">Take a moment to reflect on your day or week.</span>
+          <textarea name="thoughts" required></textarea>
+        </label>
+
+        <label>What’s Causing Stress?
+          <span class="desc">E.g., procrastination, unhealthy diet, major life event.</span>
+          <textarea name="stress" required></textarea>
+        </label>
+
+        <label>How are you handling stress?
+          <span class="desc">Share anything that helped you cope.</span>
+          <textarea name="coping" required></textarea>
+        </label>
+
+        <label>Your Worries (optional):
+          <textarea name="worries"></textarea>
+        </label>
+
+        <label>Anything else to share?
+          <textarea name="extra"></textarea>
+        </label>
+
+        <div class="consent">
+          <input type="checkbox" id="consent" name="consent" required>
+          <label for="consent" class="consent-text">
+            I voluntarily consent to the collection and secure storage of my responses. I understand my data will be used only for research and algorithm development, and will remain anonymous.
+          </label>
+        </div>
+
+        <button type="submit">Submit Response</button>
+      </form>
+    </div>
+  </div>
 
   <script>
     document.getElementById("responseForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const formData = Object.fromEntries(new FormData(e.target).entries());
-
-      // ✅ Convert checkbox to Boolean
       formData.consent = e.target.consent.checked;
 
       try {
-        const res = await fetch("/api/responses", {  // replace with full URL if needed
+        const res = await fetch("/api/responses", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData)
